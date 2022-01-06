@@ -1,1 +1,118 @@
 /* You can add global styles to this file, and also import other style files */
+@import "fontawesome-pro/scss/fontawesome.scss";
+@import "fontawesome-pro/scss/brands.scss";
+@import "fontawesome-pro/scss/light.scss";
+@import "fontawesome-pro/scss/duotone.scss";
+@import "fontawesome-pro/scss/regular.scss";
+@import "fontawesome-pro/scss/solid.scss";
+
+$font-family-sans-serif: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+$font-weight-base: 300 !default;
+$font-size-base: 1.1rem !default;
+$btn-font-weight: 300;
+$btn-font-size: 1.1rem;
+$btn-font-size-lg: 1.2rem;
+$btn-font-size-sm: 0.875rem;
+$input-font-size: 1.1rem;
+$input-font-size-lg: 1.1rem;
+$input-font-size-sm: 1.1rem;
+$input-padding-top: 0.625rem;
+$input-padding-bottom: 0.5rem;
+$dropdown-font-size: 1rem;
+
+$sidenav-link-font-size: 1rem;
+$sidenav-collapse-sidenav-link-font-size: 1rem;
+$badge-font-weight: 300;
+
+@import '~mdb-angular-ui-kit/assets/scss/mdb.scss';
+@import "~ngx-toastr/toastr";
+
+.card.card-classic {
+  border: 1px solid #e0e0e0 !important;
+  box-shadow: none !important;
+
+  .card-header {
+    background-color: #fbfbfb !important;
+  }
+}
+
+.table-inherit {
+  font-size: 1.1rem !important;
+}
+
+.no-wrap-table td, .no-wrap-table td *, .no-wrap-table th, .no-wrap-table th * {
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+td.wrapped-cell {
+  white-space: break-spaces;
+  word-break: break-all;
+}
+
+.font-size-750 {
+  font-size: 0.75rem !important;
+}
+
+.text-wrapped {
+  white-space: break-spaces;
+  word-break: break-all;
+}
+
+.height-100 {
+  height: 100% !important;
+}
+
+.sidenav-link {
+  .rotate-icon {
+    transform: rotate(0deg);
+  }
+}
+
+.dropdown-item {
+  font-weight: 300;
+}
+
+.sidenav-link.active {
+  .rotate-icon {
+    transform: rotate(180deg) !important;
+  }
+}
+
+.form-control {
+  height: auto !important;
+}
+
+.btn {
+  text-transform: none !important;
+}
+
+.nav-tabs {
+  .nav-link {
+    text-transform: none;
+    font-weight: inherit;
+    font-size: inherit;
+  }
+}
+
+.select-option {
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+small {
+  font-size: 0.875rem !important;
+}
+
+.fs-sm {
+  font-size: 1rem !important;
+}
+
+.fs-xs {
+  font-size: 0.875rem !important;
+}
+
