@@ -4,6 +4,8 @@ import {HttpService} from "./httpService";
 import {ValidatorService} from "./validatorService";
 import {AppEvents} from "./appEvents";
 import {NotifyService} from "./notifyService";
+import {AuthService} from "./authService";
+import {ApiService} from "./apiService";
 
 export interface PlainObject {
   [key: string]: any
@@ -12,8 +14,13 @@ export interface PlainObject {
 @Injectable({providedIn: "root"})
 
 export class AppService {
-  public readonly localStorageMap = {};
+  public readonly localStorageMap = {
+    authSessionId: "authSessionToken",
+    authSessionHmacSecret: "authSessionHMACSecret"
+  };
 
+  public readonly api: ApiService;
+  public readonly auth: AuthService;
   public readonly validator: ValidatorService;
   public readonly events: AppEvents;
 
@@ -30,6 +37,8 @@ export class AppService {
   ) {
     this.validator = new ValidatorService(this);
     this.events = new AppEvents(this);
+    this.api = new ApiService(this);
+    this.auth = new AuthService(this);
   }
 
   /**

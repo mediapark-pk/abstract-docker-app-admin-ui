@@ -1,8 +1,9 @@
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {timeout} from "rxjs/operators";
+import {PlainObject} from "./appService";
 
-export type httpMethod = 'get' | 'post' | 'put' | 'delete';
+export type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
 export interface HttpSimpleObject {
   [key: string]: string
@@ -16,7 +17,7 @@ export interface AppHttpResponse {
 }
 
 export interface AppHttpRequest {
-  method: httpMethod,
+  method: HttpMethod,
   url: string,
   data: object | undefined,
   headers: HttpSimpleObject | undefined,
@@ -31,6 +32,16 @@ export interface AppHttpRequest {
  */
 export class HttpService {
   public constructor(private client: HttpClient) {
+  }
+
+  /**
+   * RFC3986 compatible encodeURIComponent
+   * @param str
+   */
+  public encodeURIComponent(str: string): string {
+    return encodeURIComponent(str).replace(/[!'()*]/g, function (c: string) {
+      return '%' + c.charCodeAt(0).toString(16);
+    });
   }
 
   /**
@@ -61,7 +72,7 @@ export class HttpService {
    * @param method
    * @param req
    */
-  private create(method: httpMethod, req: AppHttpRequest): Promise<AppHttpResponse> {
+  private create(method: HttpMethod, req: AppHttpRequest): Promise<AppHttpResponse> {
     req.method = method;
     return this.sendHttpRequest(req);
   }
