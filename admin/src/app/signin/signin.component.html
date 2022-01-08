@@ -2,6 +2,10 @@
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="alert alert-warning alert-dismissible fade show mb-3" *ngIf="authSessionMsg">
+          <i class="fal fa-exclamation-circle me-2"></i>{{authSessionMsg}}
+          <button (click)="this.authSessionMsg = undefined" type="button" class="btn-close" aria-label="Close"></button>
+        </div>
         <div class="card shadow-2-strong" style="border-radius: 1rem;">
           <div class="card-header text-center">
             <h3 class="card-title my-3"><i class="fal fa-users-crown me-2"></i><br><span class="fw-light">Administrator Signin</span>

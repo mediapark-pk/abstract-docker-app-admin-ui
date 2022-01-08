@@ -8,6 +8,7 @@ import {AppService} from "../../services/appService";
   styleUrls: ['./signin.component.scss']
 })
 export class SigninComponent implements OnInit {
+  public authSessionMsg?: string;
   public signinLoading: boolean = false;
   public signinForm = new FormGroup({
     email: new FormControl(),
@@ -16,6 +17,10 @@ export class SigninComponent implements OnInit {
   });
 
   constructor(private app: AppService) {
+    if (app.flash.authSessionSignin) {
+      this.authSessionMsg = app.flash.authSessionSignin;
+      app.flash.authSessionSignin = undefined;
+    }
   }
 
   public testDemo(): void {

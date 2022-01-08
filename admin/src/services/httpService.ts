@@ -1,7 +1,6 @@
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {timeout} from "rxjs/operators";
-import {PlainObject} from "./appService";
 
 export type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
@@ -45,35 +44,9 @@ export class HttpService {
   }
 
   /**
-   * Sends request with HTTP GET method
-   * @param req
-   */
-  public get(req: AppHttpRequest): Promise<AppHttpResponse> {
-    return this.create("get", req);
-  }
-
-  /**
-   * Sends request with HTTP POST method
-   * @param req
-   */
-  public post(req: AppHttpRequest): Promise<AppHttpResponse> {
-    return this.create("post", req);
-  }
-
-  /**
-   * Alias for request()
    * @param req
    */
   public send(req: AppHttpRequest): Promise<AppHttpResponse> {
-    return this.sendHttpRequest(req);
-  }
-
-  /**
-   * @param method
-   * @param req
-   */
-  private create(method: HttpMethod, req: AppHttpRequest): Promise<AppHttpResponse> {
-    req.method = method;
     return this.sendHttpRequest(req);
   }
 

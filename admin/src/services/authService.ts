@@ -26,9 +26,15 @@ export class AuthService implements CanActivate {
       let authSessionMeta = this.loadSessionMeta();
     } catch (e) {
       // Delete invalid values from localStorage
-      localStorage.removeItem(this.app.localStorageMap.authSessionId);
-      localStorage.removeItem(this.app.localStorageMap.authSessionHmacSecret);
+      this.clear();
     }
+  }
+
+  public clear(): void {
+    localStorage.removeItem(this.app.localStorageMap.authSessionId);
+    localStorage.removeItem(this.app.localStorageMap.authSessionHmacSecret);
+    this.authSessionMeta = undefined;
+    this.authSession = undefined;
   }
 
   public authenticate(meta: AuthSessionMeta): void {
@@ -39,11 +45,13 @@ export class AuthService implements CanActivate {
     let sessionToken = localStorage.getItem(this.app.localStorageMap.authSessionId);
     let hmacSecret = localStorage.getItem(this.app.localStorageMap.authSessionHmacSecret);
 
-    if (!sessionToken || !sessionToken.match(/[a-f0-9]{64}/i)) {
+    // noinspection SuspiciousTypeOfGuard
+    if (typeof sessionToken !== "string" || !sessionToken.match(/[a-f0-9]{64}/i)) {
       throw new Error('Invalid token');
     }
 
-    if (!hmacSecret || hmacSecret.length !== 16) {
+    // noinspection SuspiciousTypeOfGuard
+    if (typeof hmacSecret !== "string" || hmacSecret.length !== 16) {
       throw new Error('Invalid HMAC secret');
     }
 

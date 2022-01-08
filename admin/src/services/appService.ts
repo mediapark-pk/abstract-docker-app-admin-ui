@@ -5,10 +5,24 @@ import {ValidatorService} from "./validatorService";
 import {AppEvents} from "./appEvents";
 import {NotifyService} from "./notifyService";
 import {AuthService} from "./authService";
-import {ApiService} from "./apiService";
+import {ApiQueryFail, ApiService} from "./apiService";
+import {FormGroup} from "@angular/forms";
 
 export interface PlainObject {
   [key: string]: any
+}
+
+export interface AppFlashMessages {
+  authSessionSignin?: string
+}
+
+export interface ApiErrorHandleOpts {
+  showTitle: false,
+  type: "error",
+  position: "top-right"
+  preventAuthSession: false,
+  formGroup?: FormGroup,
+  callback?: (msg: string) => void
 }
 
 @Injectable({providedIn: "root"})
@@ -19,6 +33,7 @@ export class AppService {
     authSessionHmacSecret: "authSessionHMACSecret"
   };
 
+  public readonly flash: AppFlashMessages;
   public readonly api: ApiService;
   public readonly auth: AuthService;
   public readonly validator: ValidatorService;
@@ -39,6 +54,60 @@ export class AppService {
     this.events = new AppEvents(this);
     this.api = new ApiService(this);
     this.auth = new AuthService(this);
+    this.flash = {};
+  }
+
+  public handleAPIError(error: ApiQueryFail, options: ApiErrorHandleOpts): void {
+    let errorMsg: string = "An error occurred with API call";
+    if (typeof error.exception === "object") {
+      errorMsg = "An exception received from API server";
+      if (typeof error.exception["message"] === "string" && error.exception.message.length) {
+        errorMsg = error.exception.message;
+
+        // Session related error?
+        if (errorMsg.match(/^session_/i) && !options.preventAuthSession) {
+          let sessionErrorCode = errorMsg.toLowerCase();
+          let sessionErrorMessage = this.api.translateSessionError(sessionErrorCode);
+          if (["session_token_req"].indexOf(sessionErrorCode) < 0) {
+            // Clear any token/secret set in localStorage or memory
+            this.auth.clear();
+
+            // Set the flash message for signin controller
+            this.flash.authSessionSignin = sessionErrorMessage;
+
+            // Navigate to signin page
+            this.router.navigate(["/signin"]).then();
+            return;
+          }
+        }
+      }
+
+      if (options.formGroup && error.exception.hasOwnProperty("param")) {
+        if (typeof error.exception.param === "string" && error.exception.param.length) {
+          let formControl = options.formGroup.get(error.exception.param);
+          if (formControl) {
+            formControl.setErrors({message: errorMsg});
+            return;
+          }
+        }
+      }
+    } else if (error.error?.length) {
+      errorMsg = error.error;
+    }
+
+    // Has callback method? (for any alternative method of displaying error message)
+    if (options.callback) {
+      options.callback(errorMsg);
+      return;
+    }
+
+    // Show the notification
+    this.notify.toastr(
+      options.type,
+      options.position,
+      errorMsg,
+      options.showTitle ? `${error.meta.method.toUpperCase()} ${error.meta.endpoint}` : undefined
+    );
   }
 
   /**
