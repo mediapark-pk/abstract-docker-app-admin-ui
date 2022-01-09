@@ -28,6 +28,7 @@ export interface ApiErrorHandleOpts {
 @Injectable({providedIn: "root"})
 
 export class AppService {
+  public readonly appName: string = "Administration Panel";
   public readonly localStorageMap = {
     authSessionId: "authSessionToken",
     authSessionHmacSecret: "authSessionHMACSecret"

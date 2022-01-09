@@ -1,0 +1,191 @@
+<mdb-sidenav-layout>
+  <mdb-sidenav #sidenav="mdbSidenav" [hidden]="!displaySidenav" [accordion]="true" color="light"
+               [mode]="!displaySidenav ? 'over' : 'side'"
+               scrollContainer="#sidenavLinks">
+    <div class="text-center text-light mb-0 py-3 px-3" style="background-color: #304FFE;">
+      <form class="d-flex input-group w-auto">
+        <input type="text" class="form-control form-control-sm" placeholder='Search (ctrl + "/")' aria-label="Search"/>
+        <button class="btn btn-sm btn-outline-light" type="button" data-mdb-ripple-color="dark">
+          <i class="fal fa-search"></i>
+        </button>
+      </form>
+    </div>
+    <ul id="sidenavLinks" mdbScrollbar class="sidenav-menu mt-0 h-100" style="background-color: #304FFE;">
+      <mdb-sidenav-item>
+        <a class="sidenav-link active" mdbRipple rippleColor="warning">
+          <i class="fal fa-chart-network me-3"></i><span>Dashboard</span>
+        </a>
+      </mdb-sidenav-item>
+      <mdb-sidenav-item>
+        <a class="sidenav-link" mdbRipple rippleColor="warning">
+          <i class="fal fa-users me-3"></i><span>Users Control</span>
+        </a>
+        <ul class="sidenav-collapse" mdbCollapse>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Search User(s)
+            </a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Add User
+            </a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Activity Log
+            </a>
+          </li>
+        </ul>
+      </mdb-sidenav-item>
+      <mdb-sidenav-item>
+        <a class="sidenav-link" mdbRipple rippleColor="warning">
+          <i class="fal fa-mailbox me-3"></i><span>Mails Queue</span>
+        </a>
+        <ul class="sidenav-collapse" mdbCollapse>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Send E-mails
+            </a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Browse Queue
+            </a>
+          </li>
+        </ul>
+      </mdb-sidenav-item>
+      <mdb-sidenav-item>
+        <a class="sidenav-link" mdbRipple rippleColor="warning">
+          <i class="fal fa-globe me-3"></i><span>Public API</span>
+        </a>
+        <ul class="sidenav-collapse" mdbCollapse>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Access Configuration
+            </a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Browse Sessions
+            </a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Queries Log
+            </a>
+          </li>
+        </ul>
+      </mdb-sidenav-item>
+      <mdb-sidenav-item>
+        <a class="sidenav-link" mdbRipple rippleColor="warning">
+          <i class="fab fa-docker me-3"></i><span>Application</span>
+        </a>
+        <ul class="sidenav-collapse" mdbCollapse>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Configuration
+            </a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Countries
+            </a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Docker
+            </a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Cache Engine (Redis)
+            </a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Databases
+            </a>
+          </li>
+        </ul>
+      </mdb-sidenav-item>
+      <mdb-sidenav-item>
+        <a class="sidenav-link" mdbRipple rippleColor="warning">
+          <i class="fal fa-users-crown me-3"></i><span>Staff Control</span>
+        </a>
+        <ul class="sidenav-collapse" mdbCollapse>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Administrators
+            </a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Browse Sessions
+            </a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" mdbRipple rippleColor="warning">
+              Activity Log
+            </a>
+          </li>
+        </ul>
+      </mdb-sidenav-item>
+      <mdb-sidenav-item>
+        <a class="sidenav-link" mdbRipple rippleColor="warning">
+          <i class="fal fa-file-user me-3"></i><span>My Account</span>
+        </a>
+      </mdb-sidenav-item>
+      <mdb-sidenav-item>
+        <a class="sidenav-link" mdbRipple rippleColor="warning">
+          <i class="fal fa-sign-out me-3"></i><span>Sign-out</span>
+        </a>
+      </mdb-sidenav-item>
+    </ul>
+  </mdb-sidenav>
+  <mdb-sidenav-content #sidenavContent>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <div class="container-fluid">
+        <button class="btn btn-light shadow-0 border-0 text-primary me-2" mdbRipple rippleColor="warning"
+                *ngIf="screenSize < 1024"
+                (click)="sidenav.toggle()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <a class="navbar-brand" href="#">
+          <i class="fal fa-users-crown mx-3" *ngIf="screenSize >= 1024"></i>{{appName}}</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          </ul>
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">
+                <i class="fal fa-sign-out me-2"></i>Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid bg-light border-bottom mb-3 shadow-sm">
+      <div class="row">
+        <div class="col-12 py-2">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+              <li class="breadcrumb-item">
+                <a href="#"><i class="fal fa-home me-2"></i>Home</a>
+              </li>
+              <li class="breadcrumb-item active"></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <main class="mt-4">
+      <router-outlet></router-outlet>
+    </main>
+  </mdb-sidenav-content>
+</mdb-sidenav-layout>
+
+
+
+

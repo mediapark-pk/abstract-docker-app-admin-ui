@@ -41,12 +41,14 @@ import {SigninComponent} from './signin/signin.component';
 import {FormFieldErrorComponent} from './shared/form-field-error/form-field-error.component';
 import {ToastrModule} from 'ngx-toastr';
 import {ReactiveFormsModule} from "@angular/forms";
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SigninComponent,
-    FormFieldErrorComponent
+    FormFieldErrorComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,

@@ -63,20 +63,8 @@ td.wrapped-cell {
   height: 100% !important;
 }
 
-.sidenav-link {
-  .rotate-icon {
-    transform: rotate(0deg);
-  }
-}
-
 .dropdown-item {
   font-weight: 300;
-}
-
-.sidenav-link.active {
-  .rotate-icon {
-    transform: rotate(180deg) !important;
-  }
 }
 
 .form-control {
@@ -102,6 +90,18 @@ td.wrapped-cell {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.sidenav-link {
+  .rotate-icon {
+    transform: rotate(0deg);
+  }
+}
+
+.sidenav-link.active {
+  .rotate-icon {
+    transform: rotate(180deg) !important;
+  }
 }
 
 small {
