@@ -18,7 +18,6 @@ export interface AppHttpResponse {
 export interface AppHttpRequest {
   method: HttpMethod,
   url: string,
-  data: object | undefined,
   headers: HttpSimpleObject | undefined,
   payload: HttpSimpleObject | string | undefined,
   timeout?: number

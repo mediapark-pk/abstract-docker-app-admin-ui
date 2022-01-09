@@ -13,6 +13,7 @@ export type ApiPayloadData = PlainObject;
 
 export interface ApiCallOptions {
   authSession?: boolean,
+  useSessionToken?: AuthSessionMeta,
   timeOut?: number,
   hmacExcludeParams?: Array<string>
 }
@@ -115,13 +116,17 @@ export class ApiService {
       if (options.authSession) {
         let sessionMeta: AuthSessionMeta;
 
-        try {
-          sessionMeta = this.app.auth.meta();
-        } catch (e) {
-          return fail(<ApiQueryFail>{
-            meta: apiCallMeta,
-            error: e.message
-          })
+        if (options?.useSessionToken) {
+          sessionMeta = options.useSessionToken;
+        } else {
+          try {
+            sessionMeta = this.app.auth.meta();
+          } catch (e) {
+            return fail(<ApiQueryFail>{
+              meta: apiCallMeta,
+              error: e.message
+            })
+          }
         }
 
         let authHeader: Array<string> = [];
@@ -143,7 +148,6 @@ export class ApiService {
 
           return httpService.encodeURIComponent(key) + "=" + httpService.encodeURIComponent(data[key]);
         });
-
         let queryStr = queryEncodedParts.filter(function (part: undefined | string) {
           return !!part;
         }).join("&");
@@ -158,8 +162,9 @@ export class ApiService {
 
       httpService.send(<AppHttpRequest>{
         method: method,
+        headers: headers,
+        payload: method === "get" ? data : JSON.stringify(data),
         url: this.config.server + endpoint,
-        payload: data,
         timeout: options.timeOut
       }).then((response: AppHttpResponse) => {
         let apiQueryFail: ApiQueryFail = {

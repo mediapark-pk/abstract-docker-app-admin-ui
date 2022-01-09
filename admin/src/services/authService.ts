@@ -1,6 +1,6 @@
-import {AppService} from "./appService";
+import {ApiErrorHandleOpts, AppService} from "./appService";
 import {CanActivate} from "@angular/router";
-import {ApiSuccess} from "./apiService";
+import {ApiQueryFail, ApiSuccess} from "./apiService";
 
 export type authSessionType = "web" | "app";
 
@@ -44,10 +44,15 @@ export class AuthService implements CanActivate {
     this.authSession = undefined;
   }
 
-  public async authenticate(meta: AuthSessionMeta) {
-    await this.app.api.callServer("get", "/session", {}).then((success: ApiSuccess) => {
-      console.log(success);
-    })
+  public authenticate(meta: AuthSessionMeta): Promise<boolean> {
+    return new Promise<boolean>((success, fail) => {
+      this.app.api.callServer("get", "/auth/session", {}, {useSessionToken: meta}).then((success: ApiSuccess) => {
+        console.log(success);
+      }).catch((error: ApiQueryFail) => {
+        this.app.handleAPIError(error, <ApiErrorHandleOpts>{preventAuthSession: true});
+        return fail(false);
+      });
+    });
   }
 
   private loadSessionMeta(): AuthSessionMeta {

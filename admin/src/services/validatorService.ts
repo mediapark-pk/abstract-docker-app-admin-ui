@@ -4,6 +4,10 @@ export class ValidatorService {
   public constructor(private _app: AppService) {
   }
 
+  /**
+   * Validates GoogleAuth TOTP code
+   * @param totpCode
+   */
   public validateTotp(totpCode: any): string {
     if (typeof totpCode !== "string" || !totpCode.length) {
       throw new Error('2FA TOTP code is required');
@@ -16,6 +20,11 @@ export class ValidatorService {
     return totpCode;
   }
 
+  /**
+   * Validates input as ASCII string
+   * @param input
+   * @param required
+   */
   public validateInput(input: any, required: boolean = true): string {
     if (typeof input === "number") {
       input = input.toString();
@@ -36,6 +45,10 @@ export class ValidatorService {
     return input;
   }
 
+  /**
+   * Validates a password
+   * @param password
+   */
   public validatePassword(password: any): string {
     if (typeof password !== "string" || !password.length) {
       throw new Error('Password is required');
@@ -56,6 +69,10 @@ export class ValidatorService {
     return password;
   }
 
+  /**
+   * Validates an e-mail address
+   * @param email
+   */
   public validateEmail(email: any): string {
     if (typeof email !== "string" || !email.length) {
       throw new Error('E-mail address is required');
@@ -72,16 +89,16 @@ export class ValidatorService {
     return email;
   }
 
+  /**
+   * Checks if argument e-mail address is valid
+   * @param email
+   */
   public isValidEmail(email: any): boolean {
     if (typeof email !== "string") {
       return false;
     }
 
-    if (/^\w+@[a-z0-9]+(\.[a-z0-9]{2,8}){1,3}$/.test(email)) {
-      return false;
-    }
-
-    return false;
+    return /^\w+@[a-z0-9]+(\.[a-z0-9]{2,8}){1,3}$/.test(email);
   }
 
   /**

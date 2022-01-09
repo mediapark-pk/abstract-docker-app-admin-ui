@@ -3,7 +3,7 @@ import {Router} from "@angular/router";
 import {HttpService} from "./httpService";
 import {ValidatorService} from "./validatorService";
 import {AppEvents} from "./appEvents";
-import {NotifyService} from "./notifyService";
+import {notifyPos, NotifyService, notifyType} from "./notifyService";
 import {AuthService} from "./authService";
 import {ApiQueryFail, ApiService} from "./apiService";
 import {FormGroup} from "@angular/forms";
@@ -17,10 +17,10 @@ export interface AppFlashMessages {
 }
 
 export interface ApiErrorHandleOpts {
-  showTitle: false,
-  type: "error",
-  position: "top-right"
-  preventAuthSession: false,
+  showTitle: boolean,
+  type: notifyType,
+  position: notifyPos,
+  preventAuthSession: boolean,
   formGroup?: FormGroup,
   callback?: (msg: string) => void
 }
@@ -58,7 +58,14 @@ export class AppService {
     this.flash = {};
   }
 
-  public handleAPIError(error: ApiQueryFail, options: ApiErrorHandleOpts): void {
+  public handleAPIError(error: ApiQueryFail, options?: ApiErrorHandleOpts): void {
+    options = Object.assign(<ApiErrorHandleOpts>{
+      showTitle: false,
+      type: "error",
+      position: "top-right",
+      preventAuthSession: false
+    }, options);
+
     let errorMsg: string = "An error occurred with API call";
     if (typeof error.exception === "object") {
       errorMsg = "An exception received from API server";
