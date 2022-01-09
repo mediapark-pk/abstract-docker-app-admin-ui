@@ -29,6 +29,7 @@ export interface ApiErrorHandleOpts {
 
 export class AppService {
   public readonly appName: string = "Administration Panel";
+  public readonly persistent: boolean = true;
   public readonly localStorageMap = {
     authSessionId: "authSessionToken",
     authSessionHmacSecret: "authSessionHMACSecret"

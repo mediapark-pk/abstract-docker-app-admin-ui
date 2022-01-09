@@ -12,7 +12,7 @@ import {AuthSessionMeta} from "../../services/authService";
 })
 export class SigninComponent implements OnInit {
   public authSessionMsg?: string;
-  public signinDisabled: boolean = false;
+  public signinDisabled: boolean = true;
   public signinLoading: boolean = false;
   public totpSubmit: boolean = false;
   public signinForm = new FormGroup({
@@ -27,9 +27,11 @@ export class SigninComponent implements OnInit {
       app.flash.authSessionSignin = undefined;
     }
 
-    if (this.app.auth.isAuthenticated()) {
+    if (this.app.auth.hasToken()) {
       this.app.router.navigate(["/auth/dashboard"]).then();
       return;
+    } else {
+      this.signinDisabled = false;
     }
   }
 
@@ -79,7 +81,6 @@ export class SigninComponent implements OnInit {
     let sessionToken: AuthSessionMeta | undefined = undefined;
     await this.app.api.callServer("post", "/signin", signinData, {authSession: false}).then((success: ApiSuccess) => {
       try {
-        console.log(success.result);
         if (!success.result.hasOwnProperty("token") || typeof success.result.token !== "string" || !/^[a-f0-9]{64}$/i.test(success.result.token)) {
           throw new Error('Invalid API session token');
         }
@@ -109,9 +110,19 @@ export class SigninComponent implements OnInit {
       return;
     }
 
-    await this.app.auth.authenticate(sessionToken);
+    let authenticated: boolean = false;
+    await this.app.auth.authenticate(sessionToken, <ApiErrorHandleOpts>{preventAuthSession: true}).then(() => {
+      authenticated = true;
+    });
 
+    if (authenticated) {
+      this.signinLoading = false;
+      this.app.router.navigate(["/auth/dashboard"]).then();
+      return;
+    }
 
+    this.signinDisabled = false;
+    this.signinLoading = false;
   }
 
   public totpType(e: any): void {

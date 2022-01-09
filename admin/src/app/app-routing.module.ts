@@ -4,6 +4,8 @@ import {SigninComponent} from "./signin/signin.component";
 import {AuthComponent} from "./auth/auth.component";
 import {DashboardComponent} from "./auth/dashboard/dashboard.component";
 import {MyAccountComponent} from "./auth/my-account/my-account.component";
+import {AuthService} from "../services/authService";
+import {AuthGuard} from "../services/authGuard";
 
 const routes: Routes = [
   {path: '', component: SigninComponent},
@@ -11,6 +13,7 @@ const routes: Routes = [
   {
     path: 'auth',
     component: AuthComponent,
+    canActivate: [AuthGuard],
     children: [
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
       {path: 'dashboard', component: DashboardComponent},

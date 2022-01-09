@@ -1,5 +1,4 @@
 import {ApiErrorHandleOpts, AppService} from "./appService";
-import {CanActivate} from "@angular/router";
 import {ApiQueryFail, ApiSuccess} from "./apiService";
 
 export type authSessionType = "web" | "app";
@@ -9,48 +8,75 @@ export interface AuthSessionMeta {
   hmacSecret: string
 }
 
+export interface AuthAdminPrivileges {
+  [key: string]: boolean
+}
+
+export interface AuthAdmin {
+  email: string,
+  isRoot: boolean,
+  privileges: AuthAdminPrivileges
+}
+
 export interface AuthSession {
   type: authSessionType,
   archived: boolean,
-  adminEmail: string,
+  admin: AuthAdmin,
   issuedOn: number,
   lastUsedOn: number,
   last2faOn: number,
 }
 
-export class AuthService implements CanActivate {
+export class AuthService {
   private authSessionMeta?: AuthSessionMeta;
   private authSession?: AuthSession;
 
   public constructor(private app: AppService) {
+    if (!this.app.persistent) {
+      return;
+    }
+
     try {
       this.authSessionMeta = this.loadSessionMeta();
     } catch (e) {
       // Delete invalid values from localStorage
       this.clear();
     }
-
-    if (this.authSessionMeta) {
-      this.authenticate(this.authSessionMeta).then();
-    }
-
-    console.log("!!! constructed auth service !!!");
   }
 
   public clear(): void {
+    let prevStatus: boolean = this.isAuthenticated();
     localStorage.removeItem(this.app.localStorageMap.authSessionId);
     localStorage.removeItem(this.app.localStorageMap.authSessionHmacSecret);
     this.authSessionMeta = undefined;
     this.authSession = undefined;
+
+    if (prevStatus) {
+      this.app.events.onSigninChange().next(false);
+    }
   }
 
-  public authenticate(meta: AuthSessionMeta): Promise<boolean> {
-    return new Promise<boolean>((success, fail) => {
+  public authenticate(meta: AuthSessionMeta, errorOpts?: ApiErrorHandleOpts): Promise<void> {
+    return new Promise<void>((authenticated, problem) => {
       this.app.api.callServer("get", "/auth/session", {}, {useSessionToken: meta}).then((success: ApiSuccess) => {
-        console.log(success);
+        let authSession: AuthSession = <AuthSession>success.result;
+
+        // Authenticate
+        this.authSessionMeta = meta;
+        this.authSession = authSession;
+
+        if (this.app.persistent) {
+          localStorage.setItem(this.app.localStorageMap.authSessionId, meta.token);
+          localStorage.setItem(this.app.localStorageMap.authSessionHmacSecret, meta.hmacSecret);
+        }
+
+        // Fire event
+        this.app.events.onSigninChange().next(true);
+
+        return authenticated();
       }).catch((error: ApiQueryFail) => {
-        this.app.handleAPIError(error, <ApiErrorHandleOpts>{preventAuthSession: true});
-        return fail(false);
+        this.app.handleAPIError(error, errorOpts);
+        return problem();
       });
     });
   }
@@ -79,6 +105,10 @@ export class AuthService implements CanActivate {
     return !!this.authSession;
   }
 
+  public hasToken(): boolean {
+    return !!this.authSessionMeta;
+  }
+
   public meta(): AuthSessionMeta {
     if (!this.authSessionMeta) {
       throw new Error('Session Token and HMAC secret not set');
@@ -93,14 +123,5 @@ export class AuthService implements CanActivate {
     }
 
     return this.authSession;
-  }
-
-  public canActivate(): boolean {
-    if (this.authSession) {
-      return true;
-    }
-
-    this.app.router.navigate(["/signin"]).then();
-    return false;
   }
 }
