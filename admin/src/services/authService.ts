@@ -1,5 +1,6 @@
 import {AppService} from "./appService";
 import {CanActivate} from "@angular/router";
+import {ApiSuccess} from "./apiService";
 
 export type authSessionType = "web" | "app";
 
@@ -23,11 +24,17 @@ export class AuthService implements CanActivate {
 
   public constructor(private app: AppService) {
     try {
-      let authSessionMeta = this.loadSessionMeta();
+      this.authSessionMeta = this.loadSessionMeta();
     } catch (e) {
       // Delete invalid values from localStorage
       this.clear();
     }
+
+    if (this.authSessionMeta) {
+      this.authenticate(this.authSessionMeta).then();
+    }
+
+    console.log("!!! constructed auth service !!!");
   }
 
   public clear(): void {
@@ -37,8 +44,10 @@ export class AuthService implements CanActivate {
     this.authSession = undefined;
   }
 
-  public authenticate(meta: AuthSessionMeta): void {
-
+  public async authenticate(meta: AuthSessionMeta) {
+    await this.app.api.callServer("get", "/session", {}).then((success: ApiSuccess) => {
+      console.log(success);
+    })
   }
 
   private loadSessionMeta(): AuthSessionMeta {

@@ -12,31 +12,38 @@
             </h3>
           </div>
           <div class="card-body p-5">
-            <form [formGroup]="signinForm">
+            <form [formGroup]="signinForm" (ngSubmit)="signinSubmit()">
               <mdb-form-control>
-                <input mdbInput type="text" formControlName="email" id="signinEmail" maxlength="32"
-                       autocomplete="new-email"
+                <input mdbInput mdbValidate type="text" formControlName="email" id="signinEmail" maxlength="32"
+                       autocomplete="new-email" [readonly]="signinDisabled" placeholder="admin@domain.com"
                        class="form-control mb-0" autofocus/>
-                <label mdbLabel class="form-label" for="signinEmail">E-mail Address</label>
+                <label mdbLabel class="form-label " for="signinEmail">E-mail Address</label>
               </mdb-form-control>
               <app-form-field-error [formField]="signinForm.controls.email"></app-form-field-error>
 
               <mdb-form-control class="mt-3">
-                <input mdbInput type="password" formControlName="password" id="signinPassword" maxlength="32"
-                       autocomplete="new-password"
+                <input mdbInput mdbValidate type="password" formControlName="password" id="signinPassword"
+                       maxlength="32"
+                       autocomplete="new-password" [readonly]="signinDisabled" placeholder="********"
                        class="form-control mb-0"/>
                 <label mdbLabel class="form-label" for="signinPassword">Password</label>
               </mdb-form-control>
               <app-form-field-error [formField]="signinForm.controls.password"></app-form-field-error>
 
               <mdb-form-control class="mt-3">
-                <input mdbInput type="text" id="signinTotp" formControlName="totp" maxlength="6" autocomplete="new-totp"
+                <input mdbInput mdbValidate type="text" id="signinTotp" formControlName="totp" maxlength="6"
+                       autocomplete="new-totp" [readonly]="signinDisabled" placeholder="000000"
+                       (keyup)="totpType($event)"
                        class="form-control mb-0"/>
                 <label mdbLabel class="form-label" for="signinTotp">2FA Code</label>
               </mdb-form-control>
               <app-form-field-error [formField]="signinForm.controls.totp"></app-form-field-error>
 
-              <button class="btn btn-primary btn-lg btn-block mt-3" type="submit" (click)="testDemo()">Login</button>
+              <button class="btn btn-primary btn-lg btn-block mt-3" type="submit" *ngIf="!signinLoading"
+                      [disabled]="signinDisabled">Login
+              </button>
+              <app-button-loader [btnClass]="'btn-primary btn-lg btn-block mt-3'"
+                                 *ngIf="signinLoading"></app-button-loader>
             </form>
           </div>
         </div>

@@ -86,7 +86,7 @@ export class ApiService {
     }
   }
 
-  public callServer(method: HttpMethod, endpoint: string, data: ApiPayloadData, options: ApiCallOptions): Promise<ApiSuccess> {
+  public callServer(method: HttpMethod, endpoint: string, data: ApiPayloadData, options?: ApiCallOptions): Promise<ApiSuccess> {
     return new Promise<ApiSuccess>((success, fail) => {
       let httpService = this.app.http;
       let timeStamp = (new Date()).getTime();

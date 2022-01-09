@@ -42,13 +42,19 @@ import {FormFieldErrorComponent} from './shared/form-field-error/form-field-erro
 import {ToastrModule} from 'ngx-toastr';
 import {ReactiveFormsModule} from "@angular/forms";
 import { AuthComponent } from './auth/auth.component';
+import { DashboardComponent } from './auth/dashboard/dashboard.component';
+import { MyAccountComponent } from './auth/my-account/my-account.component';
+import { ButtonLoaderComponent } from './shared/button-loader/button-loader.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SigninComponent,
     FormFieldErrorComponent,
-    AuthComponent
+    AuthComponent,
+    DashboardComponent,
+    MyAccountComponent,
+    ButtonLoaderComponent
   ],
   imports: [
     BrowserModule,
