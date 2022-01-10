@@ -94,7 +94,8 @@
             </a>
           </li>
           <li class="sidenav-item">
-            <a class="sidenav-link" mdbRipple rippleColor="warning">
+            <a class="sidenav-link" mdbRipple rippleColor="warning" routerLink="/auth/app/docker"
+               routerLinkActive="active">
               Docker
             </a>
           </li>
@@ -167,21 +168,27 @@
         </div>
       </div>
     </nav>
-    <div class="container-fluid bg-light border-bottom mb-3 shadow-sm">
+    <div class="container-fluid bg-light border-bottom shadow-2-strong">
       <div class="row">
         <div class="col-12 py-2">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0">
-              <li class="breadcrumb-item">
-                <a href="#"><i class="fal fa-home me-2"></i>Home</a>
-              </li>
-              <li class="breadcrumb-item active"></li>
+              <ng-container *ngFor="let breadcrumb of breadcrumbs">
+                <li class="breadcrumb-item" [ngClass]="breadcrumb.active ? 'active' : ''">
+                  <a [routerLink]="breadcrumb.link" *ngIf="breadcrumb.link">
+                    <i *ngIf="breadcrumb.icon" class="{{breadcrumb.icon}} me-2"></i>{{breadcrumb.page}}
+                  </a>
+                  <ng-container *ngIf="!breadcrumb.link">
+                    <i *ngIf="breadcrumb.icon" class="{{breadcrumb.icon}} me-2"></i>{{breadcrumb.page}}
+                  </ng-container>
+                </li>
+              </ng-container>
             </ol>
           </nav>
         </div>
       </div>
     </div>
-    <main class="mt-4">
+    <main>
       <router-outlet></router-outlet>
     </main>
   </mdb-sidenav-content>

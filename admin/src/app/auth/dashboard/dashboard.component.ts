@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AdminPanelService} from "../../../services/adminPanelService";
 
 @Component({
   selector: 'app-dashboard',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private adminPanel: AdminPanelService) {
+  }
 
   ngOnInit(): void {
+    this.adminPanel.breadcrumbs.next([{page: "Dashboard", active: true}]);
+    this.adminPanel.titleChange.next(["Dashboard"]);
   }
 
 }

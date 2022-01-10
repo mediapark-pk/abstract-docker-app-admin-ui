@@ -6,6 +6,8 @@ import {DashboardComponent} from "./auth/dashboard/dashboard.component";
 import {MyAccountComponent} from "./auth/my-account/my-account.component";
 import {AuthService} from "../services/authService";
 import {AuthGuard} from "../services/authGuard";
+import {AuthAppComponent} from "./auth/app/app.component";
+import {DockerComponent} from "./auth/app/docker/docker.component";
 
 const routes: Routes = [
   {path: '', component: SigninComponent},
@@ -18,7 +20,14 @@ const routes: Routes = [
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
       {path: 'dashboard', component: DashboardComponent},
       {path: 'my_account', component: MyAccountComponent},
-
+      {
+        path: 'app',
+        component: AuthAppComponent,
+        children: [
+          {path: '', redirectTo: 'docker', pathMatch: 'full'},
+          {path: 'docker', component: DockerComponent}
+        ]
+      }
     ]
   }
 ];

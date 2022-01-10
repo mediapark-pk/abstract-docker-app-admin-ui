@@ -165,7 +165,7 @@ export class ApiService {
         headers: headers,
         payload: method === "get" ? data : JSON.stringify(data),
         url: this.config.server + endpoint,
-        timeout: options.timeOut
+        timeout: typeof options.timeOut === "number" ? options.timeOut * 10000 : undefined
       }).then((response: AppHttpResponse) => {
         let apiQueryFail: ApiQueryFail = {
           meta: apiCallMeta
