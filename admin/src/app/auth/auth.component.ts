@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {AppService} from "../../services/appService";
 import {AdminPanelService, breadcrumb} from "../../services/adminPanelService";
 import {Title} from "@angular/platform-browser";
@@ -14,7 +14,7 @@ export class AuthComponent implements OnInit {
   public screenSize: number;
   public breadcrumbs: Array<breadcrumb> = [];
 
-  constructor(private app: AppService, private adminPanel: AdminPanelService, private titleChange: Title) {
+  constructor(private app: AppService, private adminPanel: AdminPanelService, private titleChange: Title, private cdr: ChangeDetectorRef) {
     this.appName = app.appName;
     this.screenSize = window.innerWidth;
     this.displaySidenav = window.innerWidth >= 769;
@@ -29,11 +29,14 @@ export class AuthComponent implements OnInit {
       })
 
       this.breadcrumbs = breadcrumbs;
+
+      this.cdr.detectChanges();
     });
 
     this.adminPanel.titleChange.subscribe((pageTitle: Array<string>) => {
       this.titleChange.setTitle(pageTitle.concat([this.appName]).join(" / "))
+
+      this.cdr.detectChanges();
     });
   }
-
 }

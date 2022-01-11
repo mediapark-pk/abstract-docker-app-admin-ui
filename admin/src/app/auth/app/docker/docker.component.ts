@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {AppService} from "../../../../services/appService";
 import {ApiSuccess} from "../../../../services/apiService";
 import {AdminPanelService} from "../../../../services/adminPanelService";
@@ -36,7 +36,7 @@ export interface DockerConfigService {
   templateUrl: './docker.component.html',
   styleUrls: ['./docker.component.scss']
 })
-export class DockerComponent implements OnInit {
+export class DockerComponent implements OnInit, AfterViewInit {
   public dockerConfig?: DockerConfig;
   public dockerPingCheck: boolean = false;
   public dataLoading: boolean = true;
@@ -74,6 +74,9 @@ export class DockerComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchDockerConfig().then();
+  }
+
+  ngAfterViewInit() {
     this.adminPanel.breadcrumbs.next([
       {page: 'Application', active: true},
       {page: 'Docker', active: true, icon: 'fab fa-docker'}

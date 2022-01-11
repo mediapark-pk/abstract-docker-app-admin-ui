@@ -13,7 +13,7 @@
               <mdb-form-control>
                 <input mdbInput mdbValidate type="text" formControlName="phone" id="editPhone" maxlength="32"
                        autocomplete="new-email" [readonly]="formsDisabled" placeholder="+1.23456789"
-                       [value]="this.accountData?.admin?.phone"
+                       value="{{accountData?.admin?.phone}}"
                        class="form-control mb-0" autofocus/>
                 <label mdbLabel class="form-label " for="editPhone">Phone (SMS) No.</label>
               </mdb-form-control>
