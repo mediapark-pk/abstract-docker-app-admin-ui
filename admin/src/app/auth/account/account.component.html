@@ -1,0 +1,99 @@
+<section class="mt-5 mb-3">
+  <div class="container">
+    <div class="row d-flex justify-content-center">
+      <div class="col-12 col-md-10 col-lg-6 col-xl-6">
+        <form [formGroup]="editAccountForm">
+          <div class="card border shadow-0 mb-4">
+            <div class="card-header bg-light">
+              <h5 class="card-title mb-0">
+                <i class="fal fa-user-edit me-2"></i>Change Phone No.
+              </h5>
+            </div>
+            <div class="card-body">
+              <mdb-form-control>
+                <input mdbInput mdbValidate type="text" formControlName="phone" id="editPhone" maxlength="32"
+                       autocomplete="new-email" [readonly]="formsDisabled" placeholder="+1.23456789"
+                       [value]="this.accountData?.admin?.phone"
+                       class="form-control mb-0" autofocus/>
+                <label mdbLabel class="form-label " for="editPhone">Phone (SMS) No.</label>
+              </mdb-form-control>
+              <app-form-field-error [formField]="editAccountForm.controls.phone"></app-form-field-error>
+            </div>
+            <div class="card-footer text-right">
+              <button class="btn btn-outline-primary" type="submit" *ngIf="!editAccountSubmit"
+                      [disabled]="formsDisabled">Update
+              </button>
+              <app-button-loader [btnClass]="'btn-outline-primary'" *ngIf="editAccountSubmit"></app-button-loader>
+            </div>
+          </div>
+        </form>
+        <form [formGroup]="changePasswordForm">
+          <div class="card border shadow-0 mb-4">
+            <div class="card-header bg-light">
+              <h5 class="card-title mb-0">
+                <i class="fal fa-unlock-alt me-2"></i>Change Password
+              </h5>
+            </div>
+            <div class="card-body">
+              <mdb-form-control>
+                <input mdbInput mdbValidate type="text" formControlName="newPassword" id="changeNewPw"
+                       maxlength="32"
+                       autocomplete="new-password" [readonly]="formsDisabled" placeholder="********"
+                       class="form-control mb-0" autofocus/>
+                <label mdbLabel class="form-label " for="changeNewPw">New Password</label>
+              </mdb-form-control>
+              <app-form-field-error [formField]="changePasswordForm.controls.newPassword"></app-form-field-error>
+
+              <mdb-form-control class="mt-3">
+                <input mdbInput mdbValidate type="password" formControlName="retypeNewPassword" id="changeNewPwRetype"
+                       maxlength="32"
+                       autocomplete="new-password" [readonly]="formsDisabled" placeholder="********"
+                       class="form-control mb-0" autofocus/>
+                <label mdbLabel class="form-label " for="changeNewPwRetype">Retype New Password</label>
+              </mdb-form-control>
+              <app-form-field-error [formField]="changePasswordForm.controls.retypeNewPassword"></app-form-field-error>
+            </div>
+            <div class="card-footer text-right">
+              <button class="btn btn-outline-danger" type="submit" *ngIf="!changePwSubmit"
+                      [disabled]="formsDisabled">Change Password
+              </button>
+              <app-button-loader [btnClass]="'btn-outline-danger'" *ngIf="changePwSubmit"></app-button-loader>
+            </div>
+          </div>
+        </form>
+        <form [formGroup]="changeTotpForm">
+          <div class="card border shadow-0 mb-4">
+            <div class="card-header bg-light">
+              <h5 class="card-title mb-0">
+                <i class="fal fa-abacus me-2"></i>GoogleAuth 2FA Seed
+              </h5>
+            </div>
+            <div class="card-body text-center bg-inner-page" *ngIf="accountData">
+              <img
+                src="//chart.googleapis.com/chart?chs=177x177&cht=qr&chld=M|0&chl=otpauth://totp/{{appName}}:{{accountData.admin.email}}?secret={{accountData.suggestedAuthSeed}}&issuer={{appName}}"
+                width="150" height="150" alt="GoogleAuth QR code" class="">
+              <p class="mt-2 mb-0">
+                <mark>{{accountData.suggestedAuthSeed}}</mark>
+              </p>
+            </div>
+            <div class="card-body">
+              <mdb-form-control>
+                <input mdbInput mdbValidate type="text" formControlName="totp" id="newTotp" maxlength="6"
+                       autocomplete="off" [readonly]="formsDisabled" placeholder="000000"
+                       class="form-control mb-0" autofocus/>
+                <label mdbLabel class="form-label " for="newTotp">New TOTP Code</label>
+              </mdb-form-control>
+              <app-form-field-error [formField]="changeTotpForm.controls.totp"></app-form-field-error>
+            </div>
+            <div class="card-footer text-right">
+              <button class="btn btn-outline-danger" type="submit" *ngIf="!changeTotpSubmit"
+                      [disabled]="formsDisabled">Change 2FA Seed
+              </button>
+              <app-button-loader [btnClass]="'btn-outline-danger'" *ngIf="changeTotpSubmit"></app-button-loader>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

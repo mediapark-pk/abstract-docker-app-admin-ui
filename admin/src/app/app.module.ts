@@ -43,11 +43,11 @@ import {ToastrModule} from 'ngx-toastr';
 import {ReactiveFormsModule} from "@angular/forms";
 import {AuthComponent} from './auth/auth.component';
 import {DashboardComponent} from './auth/dashboard/dashboard.component';
-import {MyAccountComponent} from './auth/my-account/my-account.component';
 import {ButtonLoaderComponent} from './shared/button-loader/button-loader.component';
 import {DockerComponent} from './auth/app/docker/docker.component';
 import {AuthAppComponent} from './auth/app/app.component';
-import { SpinnerIconComponent } from './shared/spinner-icon/spinner-icon.component';
+import {SpinnerIconComponent} from './shared/spinner-icon/spinner-icon.component';
+import {AccountComponent} from './auth/account/account.component';
 
 @NgModule({
   declarations: [
@@ -56,11 +56,11 @@ import { SpinnerIconComponent } from './shared/spinner-icon/spinner-icon.compone
     FormFieldErrorComponent,
     AuthComponent,
     DashboardComponent,
-    MyAccountComponent,
     ButtonLoaderComponent,
     AuthAppComponent,
     DockerComponent,
-    SpinnerIconComponent
+    SpinnerIconComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,
