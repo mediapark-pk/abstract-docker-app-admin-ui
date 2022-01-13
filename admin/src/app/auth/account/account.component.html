@@ -108,7 +108,7 @@
               </mdb-form-control>
               <app-form-field-error [formField]="changeTotpForm.controls.newTotp"></app-form-field-error>
             </div>
-            <div class="card-body text-center bg-inner-page" *ngIf="accountData && !successChangeSeed">
+            <div class="card-body text-center bg-inner-page rounded-0" *ngIf="accountData && !successChangeSeed">
               <img
                 src="//chart.googleapis.com/chart?chs=177x177&cht=qr&chld=M|0&chl=otpauth://totp/{{appName}}:{{accountData.admin.email}}?secret={{accountData.suggestedAuthSeed}}&issuer={{appName}}"
                 width="150" height="150" alt="GoogleAuth QR code" class="">
