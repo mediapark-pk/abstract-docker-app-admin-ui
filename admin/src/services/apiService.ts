@@ -15,7 +15,8 @@ export interface ApiCallOptions {
   authSession?: boolean,
   useSessionToken?: AuthSessionMeta,
   timeOut?: number,
-  hmacExcludeParams?: Array<string>
+  hmacExcludeParams?: Array<string>,
+  handleWarnings?: boolean
 }
 
 export interface ApiResponseMeta {
@@ -48,6 +49,7 @@ export interface ApiException {
 }
 
 export interface ApiWarningMsg {
+  meta: ApiResponseMeta,
   type: number,
   typeStr: string,
   message: string,
@@ -105,6 +107,7 @@ export class ApiService {
       options = Object.assign(<ApiCallOptions>{
         authSession: true,
         preventDefault: false,
+        handleWarnings: true,
       }, options);
 
       // Data
@@ -203,11 +206,20 @@ export class ApiService {
         // Look for server side warnings
         let apiWarnings: Array<ApiWarningMsg> = [];
         if (result.hasOwnProperty("warnings") && Array.isArray(result.warnings)) {
+          let metaForWarnings: ApiResponseMeta = {
+            method: method,
+            endpoint: endpoint
+          };
           result.warnings.forEach(function (warning) {
+            warning = Object.assign({meta: metaForWarnings}, warning);
             apiWarnings.push(<ApiWarningMsg>warning);
           });
 
           delete result.warnings;
+        }
+
+        if (apiWarnings.length && options?.handleWarnings) {
+          this.app.events.apiCallWarnings().next(apiWarnings);
         }
 
         // Look for server side exception

@@ -188,6 +188,21 @@
         </div>
       </div>
     </div>
+    <div class="container-fluid -border-bottom pt-4" *ngIf="apiWarnings.length">
+      <div class="container">
+        <ng-container *ngFor="let msg of apiWarnings; let msgI = index">
+          <div class="alert alert-dismissible fade show py-1 px-3" role="alert"
+               [ngClass]="getWarningAlertColor(msg.type)">
+            <p class="mb-0"><small><i class="fal fa-bug me-2"></i>[API {{msg.typeStr|titlecase}}]:
+              {{msg.meta.method|uppercase}} {{msg.meta.endpoint}}</small></p>
+            {{msg.message}}
+            <hr class="my-2">
+            <small><i class="fal fa-scroll-old me-2"></i>{{msg.file}} # {{msg.line}}</small>
+            <button (click)="deleteAPIWarning(msgI)" type="button" class="btn-close" aria-label="Close"></button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
     <main>
       <router-outlet></router-outlet>
     </main>
