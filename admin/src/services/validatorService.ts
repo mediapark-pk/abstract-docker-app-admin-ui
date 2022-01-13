@@ -7,6 +7,14 @@ export class ValidatorService {
   }
 
   /**
+   * Checks if argument looks like a valid phone number
+   * @param arg
+   */
+  public isValidPhNum(arg: any): boolean {
+    return typeof arg === "string" && /^\+[0-9]{1,6}\.[0-9]{4,16}$/.test(arg);
+  }
+
+  /**
    * Clear out totp input field on focus
    * @param e
    */
@@ -75,22 +83,23 @@ export class ValidatorService {
   /**
    * Validates a password
    * @param password
+   * @param label
    */
-  public validatePassword(password: any): string {
+  public validatePassword(password: any, label: string = 'Password'): string {
     if (typeof password !== "string" || !password.length) {
-      throw new Error('Password is required');
+      throw new Error(label + ' is required');
     }
 
     if (!this.isASCII(password, true, false)) {
-      throw new Error('Password contains illegal character');
+      throw new Error(label + ' contains illegal character');
     }
 
     if (password.length < 8) {
-      throw new Error('Password must be at least 8 characters');
+      throw new Error(label + ' must be at least 8 characters');
     }
 
     if (password.length > 32) {
-      throw new Error('Password cannot exceed 32 characters');
+      throw new Error(label + ' cannot exceed 32 characters');
     }
 
     return password;

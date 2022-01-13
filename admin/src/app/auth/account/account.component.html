@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row d-flex justify-content-center">
       <div class="col-12 col-md-10 col-lg-6 col-xl-6">
-        <form [formGroup]="editAccountForm">
+        <form [formGroup]="editAccountForm" (ngSubmit)="submitEditAccountForm()">
           <div class="card card-classic mb-4">
             <div class="card-header bg-light">
               <h5 class="card-title mb-0">
@@ -10,10 +10,14 @@
               </h5>
             </div>
             <div class="card-body">
+              <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="successEditAccount">
+                <strong>Account Updated!</strong> Your new phone number has been updated.
+                <button (click)="this.successEditAccount = false" type="button" class="btn-close"
+                        aria-label="Close"></button>
+              </div>
               <mdb-form-control>
                 <input mdbInput mdbValidate type="text" formControlName="phone" id="editPhone" maxlength="32"
                        autocomplete="new-email" [readonly]="formsDisabled" placeholder="+1.23456789"
-                       value="{{accountData?.admin?.phone}}"
                        class="form-control mb-0" autofocus/>
                 <label mdbLabel class="form-label " for="editPhone">Phone (SMS) No.</label>
               </mdb-form-control>
@@ -23,20 +27,30 @@
               <button class="btn btn-outline-primary" type="submit" *ngIf="!editAccountSubmit"
                       [disabled]="formsDisabled">Update
               </button>
-              <app-button-loader [btnClass]="'btn-outline-primary'" *ngIf="editAccountSubmit"></app-button-loader>
+              <app-button-loader [btnClass]="'btn-outline-primary'" [spinnerClass]="'text-primary'"
+                                 *ngIf="editAccountSubmit"></app-button-loader>
             </div>
           </div>
         </form>
-        <form [formGroup]="changePasswordForm">
+        <form [formGroup]="changePasswordForm" (ngSubmit)="submitChangePassword()">
           <div class="card border shadow-0 mb-4">
             <div class="card-header bg-light">
               <h5 class="card-title mb-0">
                 <i class="fal fa-unlock-alt me-2"></i>Change Password
               </h5>
             </div>
-            <div class="card-body">
+            <div class="card-body" *ngIf="successChangePassword">
+              <div class="alert alert-success fade show" role="alert">
+                <strong>Password Changed!</strong> Your new password has been updated. Please re-authenticate the
+                session.
+              </div>
+              <div class="alert alert-warning fade show mb-0" role="alert">
+                Redirecting to login screen... Please wait!
+              </div>
+            </div>
+            <div class="card-body" *ngIf="!successChangePassword">
               <mdb-form-control>
-                <input mdbInput mdbValidate type="text" formControlName="newPassword" id="changeNewPw"
+                <input mdbInput mdbValidate type="password" formControlName="newPassword" id="changeNewPw"
                        maxlength="32"
                        autocomplete="new-password" [readonly]="formsDisabled" placeholder="********"
                        class="form-control mb-0" autofocus/>
@@ -52,31 +66,49 @@
               </mdb-form-control>
               <app-form-field-error [formField]="changePasswordForm.controls.retypeNewPassword"></app-form-field-error>
             </div>
-            <div class="card-body border-top rounded-0 bg-light">
+            <div class="card-body border-top rounded-0 bg-light" *ngIf="!successChangePassword">
               <mdb-form-control>
                 <input mdbInput mdbValidate type="text" formControlName="totp" id="pwChangeTotp" maxlength="6"
                        autocomplete="off" [readonly]="formsDisabled" placeholder="000000"
+                       (focus)="validator.focusTotpField($event)" (keyup)="changePwTotpType($event)"
                        class="form-control mb-0" autofocus/>
                 <label mdbLabel class="form-label " for="pwChangeTotp">TOTP Code</label>
               </mdb-form-control>
               <app-form-field-error [formField]="changePasswordForm.controls.totp"></app-form-field-error>
             </div>
-            <div class="card-footer text-right">
+            <div class="card-footer text-right" *ngIf="!successChangePassword">
               <button class="btn btn-outline-danger" type="submit" *ngIf="!changePwSubmit"
                       [disabled]="formsDisabled">Change Password
               </button>
-              <app-button-loader [btnClass]="'btn-outline-danger'" *ngIf="changePwSubmit"></app-button-loader>
+              <app-button-loader [btnClass]="'btn-outline-danger'" [spinnerClass]="'text-danger'"
+                                 *ngIf="changePwSubmit"></app-button-loader>
             </div>
           </div>
         </form>
-        <form [formGroup]="changeTotpForm">
+        <form [formGroup]="changeTotpForm" (ngSubmit)="submitChangeTotp()">
           <div class="card border shadow-0 mb-4">
             <div class="card-header bg-light">
               <h5 class="card-title mb-0">
                 <i class="fal fa-abacus me-2"></i>GoogleAuth 2FA Seed
               </h5>
             </div>
-            <div class="card-body text-center bg-inner-page" *ngIf="accountData">
+            <div class="card-body" *ngIf="successChangeSeed">
+              <div class="alert alert-success fade show mb-0" role="alert">
+                <strong>GoogleAuth 2FA Seed Changed!</strong> Use TOTP codes from the new seed in your Google
+                Authenticator app from now on.
+              </div>
+            </div>
+            <div class="card-body" *ngIf="!successChangeSeed">
+              <mdb-form-control>
+                <input mdbInput mdbValidate type="text" formControlName="newTotp" id="newTotp" maxlength="6"
+                       autocomplete="off" [readonly]="formsDisabled" placeholder="000000"
+                       (focus)="validator.focusTotpField($event)" (keyup)="validator.parseTotpField($event)"
+                       class="form-control mb-0" autofocus/>
+                <label mdbLabel class="form-label " for="newTotp">New TOTP Code</label>
+              </mdb-form-control>
+              <app-form-field-error [formField]="changeTotpForm.controls.newTotp"></app-form-field-error>
+            </div>
+            <div class="card-body text-center bg-inner-page" *ngIf="accountData && !successChangeSeed">
               <img
                 src="//chart.googleapis.com/chart?chs=177x177&cht=qr&chld=M|0&chl=otpauth://totp/{{appName}}:{{accountData.admin.email}}?secret={{accountData.suggestedAuthSeed}}&issuer={{appName}}"
                 width="150" height="150" alt="GoogleAuth QR code" class="">
@@ -84,29 +116,22 @@
                 <mark>{{accountData.suggestedAuthSeed}}</mark>
               </p>
             </div>
-            <div class="card-body">
-              <mdb-form-control>
-                <input mdbInput mdbValidate type="text" formControlName="newTotp" id="newTotp" maxlength="6"
-                       autocomplete="off" [readonly]="formsDisabled" placeholder="000000"
-                       class="form-control mb-0" autofocus/>
-                <label mdbLabel class="form-label " for="newTotp">New TOTP Code</label>
-              </mdb-form-control>
-              <app-form-field-error [formField]="changeTotpForm.controls.newTotp"></app-form-field-error>
-            </div>
-            <div class="card-body border-top rounded-0 bg-light">
+            <div class="card-body border-top rounded-0 bg-light" *ngIf="!successChangeSeed">
               <mdb-form-control>
                 <input mdbInput mdbValidate type="text" formControlName="currentTotp" id="currentTotp" maxlength="6"
                        autocomplete="off" [readonly]="formsDisabled" placeholder="000000"
+                       (focus)="validator.focusTotpField($event)" (keyup)="changeSeedTotpType($event)"
                        class="form-control mb-0" autofocus/>
-                <label mdbLabel class="form-label " for="currentTotp">Exiting TOTP Code</label>
+                <label mdbLabel class="form-label " for="currentTotp">Existing TOTP Code</label>
               </mdb-form-control>
               <app-form-field-error [formField]="changeTotpForm.controls.currentTotp"></app-form-field-error>
             </div>
-            <div class="card-footer text-right">
+            <div class="card-footer text-right" *ngIf="!successChangeSeed">
               <button class="btn btn-outline-danger" type="submit" *ngIf="!changeTotpSubmit"
                       [disabled]="formsDisabled">Change 2FA Seed
               </button>
-              <app-button-loader [btnClass]="'btn-outline-danger'" *ngIf="changeTotpSubmit"></app-button-loader>
+              <app-button-loader [btnClass]="'btn-outline-danger'" [spinnerClass]="'text-danger'"
+                                 *ngIf="changeTotpSubmit"></app-button-loader>
             </div>
           </div>
         </form>
