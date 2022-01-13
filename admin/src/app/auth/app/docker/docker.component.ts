@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AppService} from "../../../../services/appService";
-import {ApiSuccess} from "../../../../services/apiService";
+import {ApiQueryFail, ApiSuccess} from "../../../../services/apiService";
 import {AdminPanelService} from "../../../../services/adminPanelService";
 
 export interface DockerConfig {
@@ -54,6 +54,8 @@ export class DockerComponent implements OnInit {
         this.dockerConfig = <DockerConfig>result.result.docker;
         this.dataLoading = false;
       }
+    }).catch((error: ApiQueryFail) => {
+      this.app.handleAPIError(error);
     });
 
     if (this.dockerConfig) {
@@ -62,6 +64,8 @@ export class DockerComponent implements OnInit {
           this.dockerConfig = <DockerConfig>result.result.docker;
           this.dockerPingCheck = true;
         }
+      }).catch((error: ApiQueryFail) => {
+        this.app.handleAPIError(error);
       });
     }
 
