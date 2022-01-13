@@ -98,6 +98,14 @@
                 Authenticator app from now on.
               </div>
             </div>
+            <div class="card-body text-center bg-inner-page rounded-0" *ngIf="accountData && !successChangeSeed">
+              <img
+                src="//chart.googleapis.com/chart?chs=177x177&cht=qr&chld=M|0&chl=otpauth://totp/{{appName}}:{{accountData.admin.email}}?secret={{accountData.suggestedAuthSeed}}&issuer={{appName}}"
+                width="150" height="150" alt="GoogleAuth QR code" class="">
+              <p class="mt-2 mb-0">
+                <mark>{{accountData.suggestedAuthSeed}}</mark>
+              </p>
+            </div>
             <div class="card-body" *ngIf="!successChangeSeed">
               <mdb-form-control>
                 <input mdbInput mdbValidate type="text" formControlName="newTotp" id="newTotp" maxlength="6"
@@ -107,14 +115,6 @@
                 <label mdbLabel class="form-label " for="newTotp">New TOTP Code</label>
               </mdb-form-control>
               <app-form-field-error [formField]="changeTotpForm.controls.newTotp"></app-form-field-error>
-            </div>
-            <div class="card-body text-center bg-inner-page rounded-0" *ngIf="accountData && !successChangeSeed">
-              <img
-                src="//chart.googleapis.com/chart?chs=177x177&cht=qr&chld=M|0&chl=otpauth://totp/{{appName}}:{{accountData.admin.email}}?secret={{accountData.suggestedAuthSeed}}&issuer={{appName}}"
-                width="150" height="150" alt="GoogleAuth QR code" class="">
-              <p class="mt-2 mb-0">
-                <mark>{{accountData.suggestedAuthSeed}}</mark>
-              </p>
             </div>
             <div class="card-body border-top rounded-0 bg-light" *ngIf="!successChangeSeed">
               <mdb-form-control>
