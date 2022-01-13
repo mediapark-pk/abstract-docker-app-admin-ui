@@ -1,7 +1,34 @@
 import {AppService} from "./appService";
 
+export type totpCallbackFn = (code: string) => void;
+
 export class ValidatorService {
   public constructor(private _app: AppService) {
+  }
+
+  /**
+   * Clear out totp input field on focus
+   * @param e
+   */
+  public focusTotpField(e: any) {
+    e.target.value = "";
+  }
+
+  /**
+   * Parse TOTP field input; call the callback fn if totpCode length is 6
+   * @param e
+   * @param submitCallback
+   */
+  public parseTotpField(e: any, submitCallback?: totpCallbackFn) {
+    let enteredCode = e.target.value;
+    if (typeof enteredCode === "string") {
+      enteredCode = enteredCode.replace(/[^0-9]/, '');
+      e.target.value = enteredCode;
+    }
+
+    if (enteredCode.length === 6 && submitCallback) {
+      submitCallback(enteredCode);
+    }
   }
 
   /**

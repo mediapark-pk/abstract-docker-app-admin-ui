@@ -33,11 +33,13 @@ export class AccountComponent implements OnInit {
 
   public changePasswordForm: FormGroup = new FormGroup({
     newPassword: new FormControl(),
-    retypeNewPassword: new FormControl()
+    retypeNewPassword: new FormControl(),
+    totp: new FormControl()
   });
 
   public changeTotpForm: FormGroup = new FormGroup({
-    totp: new FormControl()
+    currentTotp: new FormControl(),
+    newTotp: new FormControl()
   });
 
   constructor(private app: AppService, private adminPanel: AdminPanelService) {
@@ -60,7 +62,7 @@ export class AccountComponent implements OnInit {
   ngOnInit(): void {
     this.loadAccountPageData().then();
     this.adminPanel.breadcrumbs.next([
-      {page: 'My Account', active: true, icon: 'fal fa-user-edit'}
+      {page: 'My Account', active: true, icon: 'fas fa-user-edit'}
     ]);
     this.adminPanel.titleChange.next(["My Account"]);
   }

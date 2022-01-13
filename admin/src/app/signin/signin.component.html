@@ -33,7 +33,7 @@
               <mdb-form-control class="mt-3">
                 <input mdbInput mdbValidate type="text" id="signinTotp" formControlName="totp" maxlength="6"
                        autocomplete="new-totp" [readonly]="signinDisabled" placeholder="000000"
-                       (keyup)="totpType($event)"
+                       (keyup)="totpType($event)" (focus)="validator.focusTotpField($event)"
                        class="form-control mb-0"/>
                 <label mdbLabel class="form-label" for="signinTotp">2FA Code</label>
               </mdb-form-control>

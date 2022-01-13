@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {ApiErrorHandleOpts, AppService} from "../../services/appService";
-import {sign} from "chart.js/helpers";
 import {ApiQueryFail, ApiSuccess} from "../../services/apiService";
 import {AuthSessionMeta} from "../../services/authService";
+import {ValidatorService} from "../../services/validatorService";
 
 @Component({
   selector: 'app-signin',
@@ -11,10 +11,10 @@ import {AuthSessionMeta} from "../../services/authService";
   styleUrls: ['./signin.component.scss']
 })
 export class SigninComponent implements OnInit {
+  public validator: ValidatorService;
   public authSessionMsg?: string;
   public signinDisabled: boolean = true;
   public signinLoading: boolean = false;
-  public totpSubmit: boolean = false;
   public signinForm = new FormGroup({
     email: new FormControl(),
     password: new FormControl(),
@@ -22,6 +22,7 @@ export class SigninComponent implements OnInit {
   });
 
   constructor(private app: AppService) {
+    this.validator = app.validator;
     if (app.flash.authSessionSignin) {
       this.authSessionMsg = app.flash.authSessionSignin;
       app.flash.authSessionSignin = undefined;
@@ -69,6 +70,8 @@ export class SigninComponent implements OnInit {
     if (inputErrors !== 0) {
       return;
     }
+
+    this.signinForm.get("totp")?.setValue(""); // Clear out TOTP input field
 
     this.signinDisabled = true;
     this.signinLoading = true;
@@ -126,22 +129,10 @@ export class SigninComponent implements OnInit {
   }
 
   public totpType(e: any): void {
-    let enteredCode = e.target.value;
-    if (typeof enteredCode === "string") {
-      enteredCode = enteredCode.replace(/[^0-9]/, '');
-      e.target.value = enteredCode;
-    }
-
-    if (enteredCode.length === 6 && !this.totpSubmit) {
-      this.totpSubmit = true;
+    this.app.validator.parseTotpField(e, () => {
       this.signinSubmit().then();
       return;
-    }
-
-    if (enteredCode.length < 6) {
-      this.totpSubmit = false;
-      return;
-    }
+    });
   }
 
   ngOnInit(): void {

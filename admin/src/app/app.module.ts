@@ -60,7 +60,7 @@ import {AccountComponent} from './auth/account/account.component';
     AuthAppComponent,
     DockerComponent,
     SpinnerIconComponent,
-    AccountComponent
+    AccountComponent,
   ],
   imports: [
     BrowserModule,
