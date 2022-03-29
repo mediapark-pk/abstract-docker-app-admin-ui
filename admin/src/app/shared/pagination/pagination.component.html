@@ -1,0 +1,26 @@
+<nav>
+  <ul
+    class="pagination{{shapeCircle ? ' pagination-circle' : ''}}{{size ? ' pagination-' + size : ''}} justify-content-{{align}}">
+    <li class="page-item{{firstBtnDisabled ? ' disabled' : ' cursor-pointer'}}" *ngIf="boundaryLinks">
+      <a class="page-link" (click)="onPageChange(1)">{{firstBtnLabel}}</a>
+    </li>
+    <li class="page-item{{!prevBtnPageNum ? ' disabled' : ' cursor-pointer'}}" *ngIf="boundaryLinks">
+      <a class="page-link" (click)="onPageChange(prevBtnPageNum)">{{prevBtnLabel}}</a>
+    </li>
+    <li class="page-item cursor-pointer" *ngFor="let prevPage of prevPages">
+      <a class="page-link" (click)="onPageChange(prevPage)">{{prevPage}}</a>
+    </li>
+    <li class="page-item active">
+      <a class="page-link">{{currentPage}}</a>
+    </li>
+    <li class="page-item cursor-pointer" *ngFor="let nextPage of nextPages">
+      <a class="page-link" (click)="onPageChange(nextPage)">{{nextPage}}</a>
+    </li>
+    <li class="page-item{{!nextBtnPageNum ? ' disabled' : ' cursor-pointer'}}" *ngIf="boundaryLinks">
+      <a class="page-link" (click)="onPageChange(nextBtnPageNum)">{{nextBtnLabel}}</a>
+    </li>
+    <li class="page-item{{!lastBtnPageNum ? ' disabled' : ' cursor-pointer'}}" *ngIf="boundaryLinks">
+      <a class="page-link" (click)="onPageChange(lastBtnPageNum)">{{lastBtnLabel}}</a>
+    </li>
+  </ul>
+</nav>
