@@ -48,6 +48,9 @@ import {DockerComponent} from './auth/app/docker/docker.component';
 import {AuthAppComponent} from './auth/app/app.component';
 import {SpinnerIconComponent} from './shared/spinner-icon/spinner-icon.component';
 import {AccountComponent} from './auth/account/account.component';
+import { LogComponent } from './auth/staff/log/log.component';
+import { StaffComponent } from './auth/staff/staff.component';
+import { PaginationComponent } from './shared/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +64,9 @@ import {AccountComponent} from './auth/account/account.component';
     DockerComponent,
     SpinnerIconComponent,
     AccountComponent,
+    LogComponent,
+    StaffComponent,
+    PaginationComponent,
   ],
   imports: [
     BrowserModule,

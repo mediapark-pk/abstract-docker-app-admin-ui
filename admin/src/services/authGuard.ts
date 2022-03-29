@@ -17,7 +17,9 @@ export class AuthGuard implements CanActivate {
     let authenticated: boolean = false;
     await this.app.auth.authenticate(this.app.auth.meta()).then(() => {
       authenticated = true;
-    });
+    }).catch(() => {
+      this.app.auth.clear();
+    })
 
     if (authenticated) {
       return true;

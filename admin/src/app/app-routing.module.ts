@@ -7,6 +7,8 @@ import {AuthGuard} from "../services/authGuard";
 import {AuthAppComponent} from "./auth/app/app.component";
 import {DockerComponent} from "./auth/app/docker/docker.component";
 import {AccountComponent} from "./auth/account/account.component";
+import {LogComponent} from "./auth/staff/log/log.component";
+import {StaffComponent} from "./auth/staff/staff.component";
 
 const routes: Routes = [
   {path: '', component: SigninComponent},
@@ -25,6 +27,14 @@ const routes: Routes = [
         children: [
           {path: '', redirectTo: 'docker', pathMatch: 'full'},
           {path: 'docker', component: DockerComponent}
+        ]
+      },
+      {
+        path: 'staff',
+        component: StaffComponent,
+        children: [
+          {path: '', redirectTo: 'log', pathMatch: 'full'},
+          {path: 'log', component: LogComponent}
         ]
       }
     ]

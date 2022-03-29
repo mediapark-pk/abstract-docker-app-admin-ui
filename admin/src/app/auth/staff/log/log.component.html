@@ -1,0 +1,18 @@
+<section class="mt-5 mb-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card card-classic mb-4">
+          <div class="card-header">
+            <h5 class="card-title mb-0"><i class="fal fa-search me-2"></i>Administration Activity</h5>
+          </div>
+          <div class="card-body">
+            <app-pagination [totalRows]="totalRows" [currentPage]="currentPage" [perPage]="perPage"
+                            [pagesDisplayLimit]="2"
+                            [shapeCircle]="false" (changePage)="changePage($event)"></app-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
