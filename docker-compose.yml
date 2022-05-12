@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  admin:
+    build: .
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./log:/home/admin/log
+    ports:
+      - 80:3000
+      - 443:3001
